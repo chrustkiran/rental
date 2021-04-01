@@ -80,7 +80,7 @@ export function Home() {
                                 }*/
                             >
                                 <List.Item.Meta
-                                    avatar={<img alt="image" style={{width:100}} src={item.avatar} />}
+                                    avatar={<img alt="van_pic" style={{width:100}} src={item.avatar} />}
                                     title={<h3>{item.price}</h3>}
                                     description={item.code}
 
