@@ -1,12 +1,11 @@
 import styles from './Home.module.css';
-import { DatePicker, Space, InputNumber, Select, List, Avatar, Tag} from 'antd';
-import {useDispatch, useSelector} from "react-redux";
-import {onDateChange, selectCount} from "./homeSlice";
+import { DatePicker, Space, InputNumber, Select, List, Tag} from 'antd';
+import {useDispatch} from "react-redux";
+import {onDateChange} from "./homeSlice";
 
 export function Home() {
     const { Option } = Select;
     const dispatch = useDispatch();
-    const count = useSelector(selectCount);
     const destinations = ['Colombo', 'Batticalo', 'Kandy']
     const types = ['Dolphin', 'KDH', 'Car']
 
