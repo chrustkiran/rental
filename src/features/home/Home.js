@@ -27,6 +27,15 @@ export function Home() {
     };
 
 
+    /*const customIcons = {
+        1: <FrownOutlined style={{color: "purple" }}/>,
+        2: <FrownOutlined style={{color: 'purple' }} />,
+        3: <MehOutlined style={{color: 'purple' }} />,
+        4: <SmileOutlined style={{color: 'purple' }} />,
+        5: <SmileOutlined style={{color: 'purple' }} />,
+    };*/
+
+
     return(
         <div className={styles.container}>
             Call or Whatsapp : 0756761432
@@ -95,7 +104,7 @@ export function Home() {
                                     description={<Rate defaultValue={item.star} character={({ index }) => customIcons[index + 1]} disabled/>}
 
                                 />
-                                <Tag color={"green"}>{item.type}</Tag>
+                                <Tag color={"#722ed1"}>{item.type}</Tag>
                             </List.Item>
                         )}
                     />
