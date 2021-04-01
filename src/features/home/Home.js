@@ -1,7 +1,8 @@
 import styles from './Home.module.css';
-import { DatePicker, Space, InputNumber, Select, List, Tag} from 'antd';
+import { DatePicker, Space, InputNumber, Select, List, Tag, Rate} from 'antd';
 import {useDispatch} from "react-redux";
 import {onDateChange} from "./homeSlice";
+import { FrownOutlined, MehOutlined, SmileOutlined } from '@ant-design/icons';
 
 export function Home() {
     const { Option } = Select;
@@ -12,10 +13,19 @@ export function Home() {
     const listData = [];
     for (let i = 0; i < 5; i++) {
         listData.push({
-           price: '20000 LKR', code: 'XHR34', type: types[0],
+           price: '20000 LKR', star: 5, type: types[0],
             avatar: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Toyota_HiAce_GL_Grandia_Tourer_van_front.jpg"
         });
     }
+
+    const customIcons = {
+        1: <FrownOutlined />,
+        2: <FrownOutlined />,
+        3: <MehOutlined />,
+        4: <SmileOutlined />,
+        5: <SmileOutlined />,
+    };
+
 
     return(
         <div className={styles.container}>
@@ -82,7 +92,7 @@ export function Home() {
                                 <List.Item.Meta
                                     avatar={<img alt="van_pic" style={{width:100}} src={item.avatar} />}
                                     title={<h3>{item.price}</h3>}
-                                    description={item.code}
+                                    description={<Rate defaultValue={item.star} character={({ index }) => customIcons[index + 1]} disabled/>}
 
                                 />
                                 <Tag color={"green"}>{item.type}</Tag>
