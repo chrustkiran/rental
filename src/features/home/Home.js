@@ -8,7 +8,6 @@ import {disabledDate} from "./homeLogic";
 
 export function Home() {
     const {Option} = Select;
-    const {Content} = Layout;
     const dispatch = useDispatch();
     const homeVals = useSelector(homeState);
 

@@ -16,7 +16,7 @@ export const dateFilter = (selectedDateEpoch, selectedDays, nonAvailablDays) => 
         selectedDaysArr.push(selectedDayEpoch);
         selectedDayEpoch += 1;
     }
-    if (nonAvailablDays != undefined && nonAvailablDays.length > 0) {
+    if (nonAvailablDays !== undefined && nonAvailablDays.length > 0) {
         nonAvailablDays.forEach(nonAvailablDay => {
             if (selectedDaysArr.indexOf(nonAvailablDay / aDayEpoch | 0) > -1) {
                isNotRejected = false;
