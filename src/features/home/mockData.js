@@ -52,3 +52,4 @@ export const data = [{
         destination: destinations[0],
         nonAvailableDates: []
     }]
+//
