@@ -1,5 +1,5 @@
 import styles from './Home.module.css';
-import {Col, DatePicker, Image, InputNumber, Layout, List, Rate, Row, Select, Tag} from 'antd';
+import {Col, DatePicker, Image, InputNumber, List, Rate, Row, Select, Tag} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {filterData, homeState, onDateChange, onDaysChange, onDestinationChange, onTypeChange} from "./homeSlice";
 import {FrownOutlined, MehOutlined, SmileOutlined} from '@ant-design/icons';
