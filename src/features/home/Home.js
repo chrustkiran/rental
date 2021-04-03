@@ -1,117 +1,120 @@
 import styles from './Home.module.css';
-import { DatePicker, Space, InputNumber, Select, List, Tag, Rate} from 'antd';
-import {useDispatch} from "react-redux";
-import {onDateChange} from "./homeSlice";
-import { FrownOutlined, MehOutlined, SmileOutlined } from '@ant-design/icons';
+import {Col, DatePicker, Image, InputNumber, Layout, List, Rate, Row, Select, Tag} from 'antd';
+import {useDispatch, useSelector} from "react-redux";
+import {filterData, homeState, onDateChange, onDaysChange, onDestinationChange, onTypeChange} from "./homeSlice";
+import {FrownOutlined, MehOutlined, SmileOutlined} from '@ant-design/icons';
+import {data, destinations, types} from "./mockData";
+import {disabledDate} from "./homeLogic";
 
 export function Home() {
-    const { Option } = Select;
+    const {Option} = Select;
+    const {Content} = Layout;
     const dispatch = useDispatch();
-    const destinations = ['Colombo', 'Batticalo', 'Kandy']
-    const types = ['Dolphin', 'KDH', 'Car']
+    const homeVals = useSelector(homeState);
 
-    const listData = [];
-    for (let i = 0; i < 5; i++) {
-        listData.push({
-           price: '20000 LKR', star: 5, type: types[0],
-            avatar: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Toyota_HiAce_GL_Grandia_Tourer_van_front.jpg"
-        });
-    }
+    const listData = data;
 
     const customIcons = {
-        1: <FrownOutlined />,
-        2: <FrownOutlined />,
-        3: <MehOutlined />,
-        4: <SmileOutlined />,
-        5: <SmileOutlined />,
+        1: <FrownOutlined/>,
+        2: <FrownOutlined/>,
+        3: <MehOutlined/>,
+        4: <SmileOutlined/>,
+        5: <SmileOutlined/>,
     };
 
 
-    /*const customIcons = {
-        1: <FrownOutlined style={{color: "purple" }}/>,
-        2: <FrownOutlined style={{color: 'purple' }} />,
-        3: <MehOutlined style={{color: 'purple' }} />,
-        4: <SmileOutlined style={{color: 'purple' }} />,
-        5: <SmileOutlined style={{color: 'purple' }} />,
-    };*/
+    return (
 
-
-    return(
         <div className={styles.container}>
-            Call or Whatsapp : 0756761432
+            <Row>
+                <Col md={{span: 16, offset: 4}} xs={{span: 24, offset: 6}}>
+                    <h2> Call or Whatsapp : <a href={"tel:+94756761432"}>756761432</a> </h2>
 
-            <p className={styles.break}>
-                <Space>
-                    <DatePicker style={{width: 200}} placeholder="When?" onChange={(e) => dispatch(onDateChange(e.toString()))} />
-                    <InputNumber min={1} style={{width: 200}} placeholder="How many Days?" />
-                    <Select
-                        showSearch
-                        style={{ width: 200 }}
-                        placeholder="Where?"
-                        optionFilterProp="children"
-                       /* onChange={onChange}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        onSearch={onSearch}*/
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        {destinations.map(desti => (
-                            <Option value={desti}>{desti}</Option>
-                        ))}
-                    </Select>
-                    <Select
-                        showSearch
-                        style={{ width: 200 }}
-                        placeholder="Which type?"
-                        optionFilterProp="children"
-                        /* onChange={onChange}
-                         onFocus={onFocus}
-                         onBlur={onBlur}
-                         onSearch={onSearch}*/
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        {types.map(type => (
-                            <Option value={type}>{type}</Option>
-                        ))}
-                    </Select>
-                </Space>
+                    <br/>
+                    <Row gutter={24}>
+                        <Col md={{span: 6, offset: 0}} xs={{span: 12, offset: 0}}>
+                            <DatePicker style={{width: 200}} placeholder="When?"
+                                        onChange={(e) => dispatch(onDateChange(Number(e.valueOf())))}
+                                        disabledDate={disabledDate}
+                            />
+                        </Col>
 
-                <br/><br/>
+                        <Col md={{span: 6}} xs={{span: 12, offset: 0}}>
+                            <Select
+                                showSearch
+                                allowClear
+                                style={{width: 200}}
+                                placeholder="Where?"
+                                optionFilterProp="children"
+                                onChange={e => dispatch(onDestinationChange(e))}
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >  {destinations.map(desti => (
+                                <Option value={desti}>{desti}</Option>
+                            ))}
+                            </Select>
+                        </Col>
 
-                <div className={styles.break}>
-                    <List
-                        dataSource={listData}
-                        renderItem={item => (
-                            <List.Item
-                                key={item.title}
+                        <Col md={{span: 6, offset: 0}} xs={{span: 12, offset: 0}}>
+                            <InputNumber min={1} style={{width: 200}} placeholder="How many Days?"
+                            onChange={e=>{dispatch(onDaysChange(Number(e)))}}/>
+                        </Col>
 
-                               /* extra={
-                                    <img
-                                        style={{float: ""}}
-                                        width={100}
-                                        alt="logo"
-                                        src="https://png.pngtree.com/png-vector/20190621/ourlarge/pngtree-van-icon-png-image_1507389.jpg"
-                                    />
-                                }*/
+                        <Col md={{span: 6}} xs={{span: 12, offset: 0}}>
+                            <Select
+                                showSearch
+                                allowClear
+                                style={{width: 200}}
+                                placeholder="Which type?"
+                                optionFilterProp="children"
+                                onChange={e => dispatch(onTypeChange(e))}
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
                             >
-                                <List.Item.Meta
-                                    avatar={<img alt="van_pic" style={{width:100}} src={item.avatar} />}
-                                    title={<h3>{item.price}</h3>}
-                                    description={<Rate defaultValue={item.star} character={({ index }) => customIcons[index + 1]} disabled/>}
+                                {types.map(type => (
+                                    <Option value={type}>{type}</Option>
+                                ))}
+                            </Select>
+                        </Col>
 
-                                />
-                                <Tag color={"#722ed1"}>{item.type}</Tag>
-                            </List.Item>
-                        )}
-                    />
-                </div>
+                    </Row>
+                </Col>
+            </Row>
 
 
-            </p>
+            <br/>
+            <Row>
+                <Col md={{span: 12, offset: 6}} xs={{span: 24, offset: 6}}>
+                    <div className={styles.break}>
+                        <List
+                            dataSource={filterData(listData, homeVals)}
+                            pagination={{
+                                pageSize: 5,
+                            }}
+                            renderItem={item => (
+                                <List.Item
+                                    key={item.title}>
+                                    <List.Item.Meta
+                                        avatar={<Image alt="van_pic" style={{width: 100}} src={item.avatar}/>}
+                                        title={<h3>{item.price}</h3>}
+                                        description={<Rate defaultValue={item.star}
+                                                           character={({index}) => customIcons[index + 1]}
+                                                           disabled/>}
+
+                                    />
+                                    <Tag color={"#722ed1"}>{item.type}</Tag>
+                                </List.Item>
+                            )}
+                        />
+                    </div>
+                </Col>
+            </Row>
+
+
         </div>
+
+
     )
 }
