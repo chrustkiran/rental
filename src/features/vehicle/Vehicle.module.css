@@ -1,0 +1,25 @@
+.contentStyle {
+    height: 280px;
+    textAlign: center;
+    background: url('https://cdn.wallpapersafari.com/75/64/qmLKtf.jpg');
+}
+
+.break {
+    margin-top: 100px;
+}
+
+.center {
+    text-align: center;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+}
+
+.imgBorder {
+    borderRadius: 5;
+    border: 10px solid white;
+    width: 200px;
+    marginTop: 15
+}

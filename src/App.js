@@ -1,12 +1,12 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import {Home} from "./features/home/Home";
+import CustomRouter from "./features/router/Router";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Home />
+        <CustomRouter />
       </header>
     </div>
   );

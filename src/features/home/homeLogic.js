@@ -8,20 +8,22 @@ export const typeFilter = (selectedType, dataType) => {
 
 export const dateFilter = (selectedDateEpoch, selectedDays, nonAvailablDays) => {
     let isNotRejected = true;
-    const aDayEpoch = 86400000;
-    const selectedDaysArr = [];
-    selectedDays = selectedDays === undefined ? 1 : selectedDays;
-    let selectedDayEpoch = selectedDateEpoch / aDayEpoch | 0;
-    for (let i = 0; i < selectedDays; i++) {
-        selectedDaysArr.push(selectedDayEpoch);
-        selectedDayEpoch += 1;
-    }
-    if (nonAvailablDays !== undefined && nonAvailablDays.length > 0) {
-        nonAvailablDays.forEach(nonAvailablDay => {
-            if (selectedDaysArr.indexOf(nonAvailablDay / aDayEpoch | 0) > -1) {
-               isNotRejected = false;
-            }
-        });
+    if (selectedDateEpoch !== undefined && selectedDateEpoch !== null) {
+        const aDayEpoch = 86400000;
+        const selectedDaysArr = [];
+        selectedDays = selectedDays === undefined ? 1 : selectedDays;
+        let selectedDayEpoch = selectedDateEpoch / aDayEpoch | 0;
+        for (let i = 0; i < selectedDays; i++) {
+            selectedDaysArr.push(selectedDayEpoch);
+            selectedDayEpoch += 1;
+        }
+        if (nonAvailablDays !== undefined && nonAvailablDays.length > 0) {
+            nonAvailablDays.forEach(nonAvailablDay => {
+                if (selectedDaysArr.indexOf(nonAvailablDay / aDayEpoch | 0) > -1) {
+                    isNotRejected = false;
+                }
+            });
+        }
     }
     return isNotRejected;
 }
