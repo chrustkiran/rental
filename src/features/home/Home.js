@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import styles from './Home.module.css';
 import {Col, DatePicker, Image, InputNumber, List, Rate, Row, Select, Tag} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
@@ -9,8 +9,7 @@ import {
     onDateChange,
     onDaysChange,
     onDestinationChange,
-    onTypeChange,
-    push
+    onTypeChange
 } from "./homeSlice";
 import {FrownOutlined, MehOutlined, SmileOutlined} from '@ant-design/icons';
 import {data, destinations, types} from "./mockData";
