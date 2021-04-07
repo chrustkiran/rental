@@ -23,3 +23,9 @@
     width: 200px;
     marginTop: 15
 }
+
+.container {
+    padding-left: 10%;
+    padding-right: 10%;
+    font-family: "Microsoft PhagsPa"
+}

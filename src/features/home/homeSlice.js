@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {dateFilter, destinationFilter, typeFilter} from "./homeLogic";
 import {db} from "../../firebase/conf";
-import {destinations, types} from "./mockData";
+import {destinations, types} from "../data/Data";
 
 export const homeSlice = createSlice({
     name: 'home',
@@ -34,9 +34,6 @@ export const homeSlice = createSlice({
 });
 
 export const filterData = (data, homeState) => {
-   /* data.forEach(d => {
-        console.log(dateFilter(homeState.date, homeState.days, d.nonAvailableDates));
-    })*/
     return Object.values(data).filter(d => (destinationFilter(homeState.destination, d.destination)) &&
     typeFilter(homeState.type, d.type) && dateFilter(homeState.date, homeState.days, d.nonAvailableDates));
 }
@@ -63,9 +60,10 @@ const fetchDestination = (dispatch) => {
     db.ref('/rental/destination').on('value', snapShot => {
         const destData = snapShot.val();
         Object.keys(destData).forEach(destination => {
-            if (destinations.indexOf(destination) === -1) {
+            destinations[destination] = destData[destination];
+            /*if (destinations.indexOf(destination) === -1) {
                 destinations.push(destination);
-            }
+            }*/
         });
         dispatch(onDestinationFetch());
     });
@@ -75,9 +73,10 @@ const fetchTypes = (dispatch) => {
     db.ref('/rental/types').on('value', snapShot => {
         const typesData = snapShot.val();
         Object.keys(typesData).forEach(type => {
-            if (types.indexOf(type) === -1) {
+            types[type] = typesData[type];
+            /*if (types.indexOf(type) === -1) {
                 types.push(type);
-            }
+            }*/
         });
         dispatch(onTypesFetch())
     });

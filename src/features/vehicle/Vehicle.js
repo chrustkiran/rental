@@ -1,11 +1,13 @@
-import {Card, Col, Image, Row, Tag} from "antd";
+import {Button, Col, Descriptions, Image, Row, Tag} from "antd";
 import {useHistory, useParams} from "react-router";
-import {data} from "../home/mockData";
+import {data, destinations, types} from "../data/Data";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import {Carousel} from 'react-responsive-carousel';
 import styles from './Vehicle.module.css';
-import {CalendarOutlined, CarOutlined, CloseCircleOutlined, FlagOutlined} from '@ant-design/icons'
-import {env} from "../../conf/env";
+import {CalendarFilled, CalendarOutlined, CarFilled} from '@ant-design/icons'
+import {FaMapMarkedAlt} from "react-icons/fa";
+import {GiPathDistance} from "react-icons/gi";
+import {IoIosPeople} from "react-icons/io";
 
 function ImageCarousel(vehicleId) {
     return (
@@ -30,42 +32,80 @@ export function Vehicle() {
             <div className={styles.contentStyle}>
                 {ImageCarousel(vehicleId)}
             </div>
-            <div>
+            <div className={styles.container}>
                 <Row style={{fontSize: 16}} className={styles.break} gutter={24}>
-                    <Col span={6} offset={4}>
-                        <CalendarOutlined
-                            style={{color: env.color}}/> : {selectedDate !== undefined ? new Date(selectedDate).toDateString() : 'No date selected'}
+                    <Col md={{offset: 0, span: 18}} xs={{offset: 4}} style={{textAlign: "center"}}>
+                        <Descriptions layout="vertical" bordered>
+
+                            <Descriptions.Item style={{color: "purple"}} label={(
+                                <div style={{textAlign: "center", fontSize: 16}}><CalendarOutlined/>
+                                    <p style={{fontSize: 10}}>Departure</p>
+                                </div>)}> {selectedDate !== undefined ? new Date(selectedDate).toDateString() : 'No date selected'}</Descriptions.Item>
+
+                            <Descriptions.Item style={{color: "purple"}} label={(
+                                <div style={{textAlign: "center", fontSize: 16}}><CalendarFilled/>
+                                    <p style={{fontSize: 10}}>Arrival</p>
+                                </div>)}> {selectedDate !== undefined ? new Date(selectedDate).toDateString() : 'No date selected'}</Descriptions.Item>
+
+                            <Descriptions.Item style={{color: "purple"}} label={(
+                                <div style={{textAlign: "center", fontSize: 16}}><FaMapMarkedAlt size={20}/>
+                                    <p style={{fontSize: 10}}>Location</p>
+                                </div>)}> {data[vehicleId].destination}</Descriptions.Item>
+
+                            <Descriptions.Item style={{color: "purple"}} label={(
+                                <div style={{textAlign: "center", fontSize: 16}}><CarFilled/>
+                                    <p style={{fontSize: 10}}>Type</p>
+                                </div>)}> {data[vehicleId].type}</Descriptions.Item>
+
+                            <Descriptions.Item style={{color: "purple"}} label={(
+                                <div style={{textAlign: "center", fontSize: 16}}><IoIosPeople size={20}/>
+                                    <p style={{fontSize: 10}}>Max Allowed</p>
+                                </div>)}> {types[data[vehicleId].type] === undefined ? '-' : types[data[vehicleId].type]['max']}</Descriptions.Item>
+
+                            <Descriptions.Item style={{color: "purple"}} label={(
+                                <div style={{textAlign: "center", fontSize: 16}}><GiPathDistance size={20}/>
+                                    <p style={{fontSize: 10}}>Distance</p>
+                                </div>)}> {(destinations[data[vehicleId].destination] !== undefined ? destinations[data[vehicleId].destination]['distance'] : '-') + ' km'}</Descriptions.Item>
+
+                        </Descriptions>
+                        <br/>
+                        <Row style={{textAlign: "center"}}>
+                            <Col md={{offset: 12}} xs={{offset: 0}}>
+                                <Descriptions bordered>
+                                    <Descriptions.Item label={"Additional Info"}>
+                                        <Tag color="success">
+                                            A/C
+                                        </Tag>
+                                    </Descriptions.Item>
+
+                                </Descriptions>
+                            </Col>
+
+                        </Row>
                     </Col>
-                    <Col span={6}>
-                        <FlagOutlined
-                            style={{color: env.color}}/> : {data[vehicleId].destination}
-                    </Col>
-                    <Col span={6}>
-                        <CarOutlined
-                            style={{color: env.color}}/> : {data[vehicleId].type}
-                    </Col>
-                </Row>
-                <Row className={styles.break}>
-                    <Col md={{offset: 8}} xs={{offset: 4}}>
-                        <Card style={{textAlign: "center"}} title="Additional Info">
-                            <Tag icon={<CloseCircleOutlined />} color="processing">
-                                A/C
-                            </Tag>
-                            <br/>
-                            <Tag icon={<CloseCircleOutlined />} color="error">
-                                Smoking not allowed
-                            </Tag>
-                            <br/>
-                            <Tag icon={<CloseCircleOutlined />} color="error">
-                                No Wifi
-                            </Tag>
-                        </Card>
-                    </Col>
-                    <Col style={{textAlign: "center"}} md={{offset: 2}} xs={{offset: 4}}>
-                        <h2> Call or Whatsapp<br/>
-                            <a style={{color: "#722ed1"}} href={"tel:+94756761432"}>756761432</a>,
-                            <a style={{color: "#722ed1"}} href={"tel:+94756761432"}>766384184</a>
-                        </h2>
+
+                    {/*  <Divider type={"vertical"} style={{height: 400}}></Divider>*/}
+                    <Col>
+                        <Col style={{textAlign: "center"}} md={{offset: 2}} xs={{offset: 6}}>
+                            <h2 style={{padding: 10, border: '2px solid purple', color: "purple", textAlign: "center"}}>
+                                {data[vehicleId].price}
+                            </h2>
+                        </Col>
+                        <br/>
+                        <Row>
+                            <Col style={{textAlign: "center", background: "purple", color: "white", borderRadius: 5}}
+                                 md={{offset: 2}}
+                                 xs={{offset: 4}}>
+                                <h2 style={{color: "white"}}> Call or Whatsapp<br/>
+                                    <Button style={{height: 50}}>
+                                        <a style={{color: "purple", fontSize: 24}}
+                                           href={"tel:+94756761432"}>756761432</a>,
+                                        <a style={{color: "purple", fontSize: 24}}
+                                           href={"tel:+94756761432"}>766384184</a>
+                                    </Button>
+                                </h2>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             </div>

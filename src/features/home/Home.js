@@ -12,7 +12,7 @@ import {
     onTypeChange
 } from "./homeSlice";
 import {FrownOutlined, MehOutlined, SmileOutlined} from '@ant-design/icons';
-import {data, destinations, types} from "./mockData";
+import {data, destinations, types} from "../data/Data";
 import {disabledDate} from "./homeLogic";
 import {useHistory} from "react-router";
 
@@ -33,6 +33,7 @@ export function Home() {
 
     const onItemClick = (id) => {
         history.push('/vehicle/' + id, {date: homeVals.date});
+        console.log(destinations, types);
     }
 
     useEffect(() => {
@@ -70,7 +71,7 @@ export function Home() {
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
-                            >  {destinations.map(desti => (
+                            >  {Object.keys(destinations).map(desti => (
                                 <Option value={desti}>{desti}</Option>
                             ))}
                             </Select>
@@ -95,7 +96,7 @@ export function Home() {
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                {types.map(type => (
+                                {Object.keys(types).map(type => (
                                     <Option value={type}>{type}</Option>
                                 ))}
                             </Select>
@@ -122,13 +123,16 @@ export function Home() {
                                            key={item.title}>
                                     <List.Item.Meta
                                         avatar={<Image alt="van_pic" style={{width: 100}} src={item.avatars[0]}/>}
-                                        title={<h3>{item.price}</h3>}
-                                        description={<Rate defaultValue={item.star}
+                                        title={<h3 style={{width: '100%'}}>{item.price}</h3>}
+                                        description={<Rate style={{width: '100%'}} defaultValue={item.star}
                                                            character={({index}) => customIcons[index + 1]}
                                                            disabled/>}
 
                                     />
-                                    <Tag color={"#722ed1"}>{item.type}</Tag>
+                                    <div style={{textAlign: "left"}}>
+                                        <Tag color={"#722ed1"}>{item.type}</Tag>
+                                    </div>
+
                                 </List.Item>
                             )}
                         />
