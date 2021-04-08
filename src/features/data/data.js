@@ -1,6 +1,3 @@
-//export const types = ['Dolphin', 'KDH', 'Car', 'Mini Bus', 'Bus']
-
-//export const destinations = ['Colombo', 'Batticalo', 'Kandy']
 export const types = {}
 export const destinations = {}
 export const data = {
