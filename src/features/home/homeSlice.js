@@ -6,19 +6,19 @@ import {destinations, types} from "../data/store";
 export const homeSlice = createSlice({
     name: 'home',
     initialState: {
-        value : 0
+        value: 0
     },
-    reducers:{
-        onDateChange : (state, action) => {
+    reducers: {
+        onDateChange: (state, action) => {
             state.date = action.payload;
-            console.log('date: ' ,  action.payload);
+            console.log('date: ', action.payload);
         },
 
-        onDestinationChange: (state , action) => {
+        onDestinationChange: (state, action) => {
             state.destination = action.payload;
         },
 
-        onTypeChange: (state , action) => {
+        onTypeChange: (state, action) => {
             state.type = action.payload;
         },
         onDaysChange: (state, action) => {
@@ -34,19 +34,39 @@ export const homeSlice = createSlice({
 });
 
 export const filterData = (data, homeState) => {
-    return Object.values(data).filter(d => (destinationFilter(homeState.destination, d.destination)) &&
-    typeFilter(homeState.type, d.type) && dateFilter(homeState.date, homeState.days, d.nonAvailableDates));
+    const dataSetForList = [];
+    Object.values(data).forEach(vehicle => {
+        Object.keys(vehicle.destinations).forEach(dest => {
+            const newVehicle = {...vehicle}
+            newVehicle.id = vehicle.id + '_' + dest;
+            newVehicle.destination = dest;
+            newVehicle.price = vehicle.destinations[dest].price;
+            dataSetForList.push(newVehicle);
+        })
+    });
+
+    console.log(dataSetForList);
+
+return dataSetForList.filter(d => (destinationFilter(homeState.destination, d.destination)) &&
+        typeFilter(homeState.type, d.type) && dateFilter(homeState.date, homeState.days, d.nonAvailableDates))
 }
 
 
-export const {onDateChange, onDestinationChange, onTypeChange, onDaysChange, onDestinationFetch, onTypesFetch} = homeSlice.actions;
+export const {
+    onDateChange,
+    onDestinationChange,
+    onTypeChange,
+    onDaysChange,
+    onDestinationFetch,
+    onTypesFetch
+} = homeSlice.actions;
 
 export const homeState = state => state.home;
 
 export default homeSlice.reducer;
 
 export const push = (id) => {
-    db.ref('/rental/'+ id).set({
+    db.ref('/rental/' + id).set({
         id: id,
     });
 }
@@ -61,9 +81,6 @@ const fetchDestination = (dispatch) => {
         const destData = snapShot.val();
         Object.keys(destData).forEach(destination => {
             destinations[destination] = destData[destination];
-            /*if (destinations.indexOf(destination) === -1) {
-                destinations.push(destination);
-            }*/
         });
         dispatch(onDestinationFetch());
     });
@@ -74,9 +91,6 @@ const fetchTypes = (dispatch) => {
         const typesData = snapShot.val();
         Object.keys(typesData).forEach(type => {
             types[type] = typesData[type];
-            /*if (types.indexOf(type) === -1) {
-                types.push(type);
-            }*/
         });
         dispatch(onTypesFetch())
     });

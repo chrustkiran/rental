@@ -15,6 +15,8 @@ import {FrownOutlined, MehOutlined, SmileOutlined} from '@ant-design/icons';
 import {data, destinations, types} from "../data/store";
 import {disabledDate} from "./homeLogic";
 import {useHistory} from "react-router";
+import {FaMapMarkedAlt} from "react-icons/fa";
+import {env} from "../../conf/env";
 
 export function Home() {
     const {Option} = Select;
@@ -32,8 +34,7 @@ export function Home() {
     };
 
     const onItemClick = (id) => {
-        history.push('/vehicle/' + id, {date: homeVals.date});
-        console.log(destinations, types);
+        history.push('/vehicle/' + id, {date: homeVals.date, destinations: destinations, types: types});
     }
 
     useEffect(() => {
@@ -96,7 +97,7 @@ export function Home() {
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                {Object.keys(types).map(type => (
+                                {Object.keys(types).map(type=> (
                                     <Option value={type}>{type}</Option>
                                 ))}
                             </Select>
@@ -123,10 +124,11 @@ export function Home() {
                                            key={item.title}>
                                     <List.Item.Meta
                                         avatar={<Image alt="van_pic" style={{width: 100}} src={item.avatars[0]}/>}
-                                        title={<h3 style={{width: '100%'}}>{item.price}</h3>}
-                                        description={<Rate style={{width: '100%'}} defaultValue={item.star}
+                                        title={<h3 style={{width: '100%'}}>LKR {item.price}</h3>}
+                                        description={<h5><FaMapMarkedAlt color={env.color} size={16}/> {item.destination}</h5>
+                                            /*<Rate style={{width: '100%'}} defaultValue={item.star}
                                                            character={({index}) => customIcons[index + 1]}
-                                                           disabled/>}
+                                                           disabled/>*/}
 
                                     />
                                     <div style={{textAlign: "left"}}>

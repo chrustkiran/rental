@@ -1,6 +1,6 @@
 import {Button, Col, Descriptions, Image, Row, Tag} from "antd";
 import {useHistory, useParams} from "react-router";
-import {data, destinations, types} from "../data/store";
+import {data} from "../data/store";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import {Carousel} from 'react-responsive-carousel';
 import styles from './Vehicle.module.css';
@@ -22,17 +22,28 @@ function ImageCarousel(vehicleId) {
     );
 }
 
+const decodeVehicleId = (vehicleId) => {
+    return vehicleId.split('_');
+}
 export function Vehicle() {
     let {vehicleId} = useParams();
+    const dataId = decodeVehicleId(vehicleId)[0];
+    const destination = decodeVehicleId(vehicleId)[1];
     const history = useHistory();
     const selectedDate = history.location.state.date;
+    const destinations = history.location.state.destinations;
+    const types = history.location.state.types;
+
 
     return (
         <div>
             <div className={styles.contentStyle}>
-                {ImageCarousel(vehicleId)}
+                {ImageCarousel(dataId)}
             </div>
             <div className={styles.container}>
+                <Button style={{backgroundColor: "purple", color: "white"}}>
+                    <a href={"/"}>Home</a>
+                </Button>
                 <Row style={{fontSize: 16}} className={styles.break} gutter={24}>
                     <Col md={{offset: 0, span: 18}} xs={{offset: 4}} style={{textAlign: "center"}}>
                         <Descriptions layout="vertical" bordered>
@@ -50,27 +61,29 @@ export function Vehicle() {
                             <Descriptions.Item style={{color: "purple"}} label={(
                                 <div style={{textAlign: "center", fontSize: 16}}><FaMapMarkedAlt size={20}/>
                                     <p style={{fontSize: 10}}>Location</p>
-                                </div>)}> {data[vehicleId].destination}</Descriptions.Item>
+                                </div>)}> {destination}</Descriptions.Item>
 
                             <Descriptions.Item style={{color: "purple"}} label={(
                                 <div style={{textAlign: "center", fontSize: 16}}><CarFilled/>
                                     <p style={{fontSize: 10}}>Type</p>
-                                </div>)}> {data[vehicleId].type}</Descriptions.Item>
+                                </div>)}> {data[dataId].type}</Descriptions.Item>
 
                             <Descriptions.Item style={{color: "purple"}} label={(
                                 <div style={{textAlign: "center", fontSize: 16}}><IoIosPeople size={20}/>
                                     <p style={{fontSize: 10}}>Max Allowed</p>
-                                </div>)}> {types[data[vehicleId].type] === undefined ? '-' : types[data[vehicleId].type]['max']}</Descriptions.Item>
+                                </div>)}> {types[data[dataId].type] === undefined ? '-' : types[data[dataId].type]['max']}</Descriptions.Item>
 
                             <Descriptions.Item style={{color: "purple"}} label={(
                                 <div style={{textAlign: "center", fontSize: 16}}><GiPathDistance size={20}/>
                                     <p style={{fontSize: 10}}>Distance</p>
-                                </div>)}> {(destinations[data[vehicleId].destination] !== undefined ? destinations[data[vehicleId].destination]['distance'] : '-') + ' km'}</Descriptions.Item>
+                                </div>)}>
+                                {
+                                    (destinations[destination] !== undefined ? destinations[destination]['distance'] : '-') + ' km'}</Descriptions.Item>
 
                         </Descriptions>
                         <br/>
                         <Row style={{textAlign: "center"}}>
-                            <Col md={{offset: 12}} xs={{offset: 0}}>
+                            <Col md={{offset: 10}} xs={{offset: 0}}>
                                 <Descriptions bordered>
                                     <Descriptions.Item label={"Additional Info"}>
                                         <Tag color="success">
@@ -88,7 +101,7 @@ export function Vehicle() {
                     <Col>
                         <Col style={{textAlign: "center"}} md={{offset: 2}} xs={{offset: 6}}>
                             <h2 style={{padding: 10, border: '2px solid purple', color: "purple", textAlign: "center"}}>
-                                {data[vehicleId].price}
+                                LKR {data[dataId].destinations[destination].price}
                             </h2>
                         </Col>
                         <br/>
