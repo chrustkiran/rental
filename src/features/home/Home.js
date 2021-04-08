@@ -37,6 +37,7 @@ export function Home() {
         history.push('/vehicle/' + id, {date: homeVals.date, destinations: destinations, types: types});
     }
 
+    
     useEffect(() => {
         fetchData(dispatch);
     });
