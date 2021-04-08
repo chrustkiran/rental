@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import styles from './Home.module.css';
-import {Col, DatePicker, Image, InputNumber, List, Rate, Row, Select, Tag} from 'antd';
+import {Col, DatePicker, Image, InputNumber, List, Row, Select, Tag} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchData,
