@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {dateFilter, destinationFilter, typeFilter} from "./homeLogic";
 import {db} from "../../firebase/conf";
-import {destinations, types} from "../data/Data";
+import {destinations, types} from "../data/store";
 
 export const homeSlice = createSlice({
     name: 'home',

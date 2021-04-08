@@ -12,7 +12,7 @@ import {
     onTypeChange
 } from "./homeSlice";
 import {FrownOutlined, MehOutlined, SmileOutlined} from '@ant-design/icons';
-import {data, destinations, types} from "../data/Data";
+import {data, destinations, types} from "../data/store";
 import {disabledDate} from "./homeLogic";
 import {useHistory} from "react-router";
 

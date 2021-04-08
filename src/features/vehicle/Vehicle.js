@@ -1,6 +1,6 @@
 import {Button, Col, Descriptions, Image, Row, Tag} from "antd";
 import {useHistory, useParams} from "react-router";
-import {data, destinations, types} from "../data/Data";
+import {data, destinations, types} from "../data/store";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import {Carousel} from 'react-responsive-carousel';
 import styles from './Vehicle.module.css';
