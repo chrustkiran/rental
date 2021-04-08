@@ -25,13 +25,13 @@ export function Home() {
     const history = useHistory();
     const listData = data;
 
-    const customIcons = {
+   /* const customIcons = {
         1: <FrownOutlined/>,
         2: <FrownOutlined/>,
         3: <MehOutlined/>,
         4: <SmileOutlined/>,
         5: <SmileOutlined/>,
-    };
+    };*/
 
     const onItemClick = (id) => {
         history.push('/vehicle/' + id, {date: homeVals.date, destinations: destinations, types: types});
