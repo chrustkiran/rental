@@ -45,7 +45,7 @@ export function Vehicle() {
                         <a href={"/"}><BiHomeCircle/> Home</a>
                     </Button>
                     <Button style={{backgroundColor: "purple", color: "white"}}>
-                        <a onClick={()=>{history.goBack()}}><IoChevronBackCircleOutline/> Back</a>
+                        <span onClick={()=>{history.goBack()}}><IoChevronBackCircleOutline/> Back</span>
                     </Button>
                 </div>
                 <br/>
