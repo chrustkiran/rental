@@ -27,7 +27,6 @@ function ImageCarousel(data) {
 export function Vehicle() {
     const history = useHistory();
     const data = history.location.state.item;
-    const dataId = data.id;
     const destination = data.destination;
     const selectedDate = history.location.state.date;
     const selectedDay = history.location.state.days;
