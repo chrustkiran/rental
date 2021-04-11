@@ -1,4 +1,4 @@
-.container{
+.container {
     margin-top: 10px;
     align-items: center;
     justify-content: center;
@@ -11,4 +11,12 @@
 
 .clickable {
     cursor: pointer;
+}
+
+@media only screen and (min-width: 600px) {
+    .mid {
+        width: 100%;
+        text-align: left;
+        margin-left: 260px;
+    }
 }

@@ -1,12 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {dateFilter, destinationFilter, typeFilter} from "./homeLogic";
-import {db} from "../../firebase/conf";
-import {destinations, types} from "../data/store";
 
+export const dataSetForListView = [];
 export const homeSlice = createSlice({
     name: 'home',
     initialState: {
-        value: 0
+        isVehicleDetailsFetched: false
     },
     reducers: {
         onDateChange: (state, action) => {
@@ -29,26 +28,39 @@ export const homeSlice = createSlice({
         },
         onDestinationFetch: (state) => {
             state.isDestinationFetched = true;
+        },
+        onVehicleDetailsFetch: (state) => {
+            state.isVehicleDetailsFetched = true;
+        },
+        clearHomeVals: (state) => {
+            state.type = undefined;
+            state.days = undefined;
+            state.destination = undefined;
+            state.date = undefined;
         }
     }
 });
 
 export const filterData = (data, homeState) => {
-    const dataSetForList = [];
-    Object.values(data).forEach(vehicle => {
-        Object.keys(vehicle.destinations).forEach(dest => {
-            const newVehicle = {...vehicle}
-            newVehicle.id = vehicle.id + '_' + dest;
-            newVehicle.destination = dest;
-            newVehicle.price = vehicle.destinations[dest].price;
-            dataSetForList.push(newVehicle);
-        })
-    });
+    if (dataSetForListView.length === 0) {
+        console.log('inside');
+        Object.values(data).forEach(ownersVehicle => {
+            Object.values(ownersVehicle).forEach(vehicle => {
+                Object.keys(vehicle.destinations).forEach(dest => {
+                    const newVehicle = {...vehicle}
+                    newVehicle.id = vehicle.id + '_' + dest;
+                    newVehicle.destination = dest;
+                    newVehicle.price = vehicle.destinations[dest].price;
+                    dataSetForListView.push(newVehicle);
+                })
+            });
+        });
+    }
+    console.log(dataSetForListView);
 
-    console.log(dataSetForList);
-
-return dataSetForList.filter(d => (destinationFilter(homeState.destination, d.destination)) &&
-        typeFilter(homeState.type, d.type) && dateFilter(homeState.date, homeState.days, d.nonAvailableDates))
+    return dataSetForListView.filter(d => (destinationFilter(homeState.destination, d.destination)) &&
+        typeFilter(homeState.type, d.type) && dateFilter(homeState.date, homeState.days,
+            d.nonAvailableDates === undefined ? [] : Object.values(d.nonAvailableDates)))
 }
 
 
@@ -58,40 +70,11 @@ export const {
     onTypeChange,
     onDaysChange,
     onDestinationFetch,
-    onTypesFetch
+    onTypesFetch,
+    onVehicleDetailsFetch,
+    clearHomeVals
 } = homeSlice.actions;
 
 export const homeState = state => state.home;
 
 export default homeSlice.reducer;
-
-export const push = (id) => {
-    db.ref('/rental/' + id).set({
-        id: id,
-    });
-}
-
-export const fetchData = (dispatch) => {
-    fetchDestination(dispatch);
-    fetchTypes(dispatch);
-}
-
-const fetchDestination = (dispatch) => {
-    db.ref('/rental/destination').on('value', snapShot => {
-        const destData = snapShot.val();
-        Object.keys(destData).forEach(destination => {
-            destinations[destination] = destData[destination];
-        });
-        dispatch(onDestinationFetch());
-    });
-}
-
-const fetchTypes = (dispatch) => {
-    db.ref('/rental/types').on('value', snapShot => {
-        const typesData = snapShot.val();
-        Object.keys(typesData).forEach(type => {
-            types[type] = typesData[type];
-        });
-        dispatch(onTypesFetch())
-    });
-}

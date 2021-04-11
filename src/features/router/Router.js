@@ -13,7 +13,7 @@ export default function CustomRouter() {
     return (
         <Router>
         <Switch>
-            <Route path="/vehicle/:vehicleId">
+            <Route path="/vehicle/:destination">
                 <Vehicle />
             </Route>
             <Route path="/">

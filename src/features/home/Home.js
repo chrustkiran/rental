@@ -1,42 +1,37 @@
 import React, {useEffect} from 'react';
 import styles from './Home.module.css';
-import {Col, DatePicker, Image, InputNumber, List, Row, Select, Tag} from 'antd';
+import {Col, DatePicker, Image, InputNumber, List, Row, Select, Spin, Tag} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
-import {
-    fetchData,
-    filterData,
-    homeState,
-    onDateChange,
-    onDaysChange,
-    onDestinationChange,
-    onTypeChange
-} from "./homeSlice";
-import {data, destinations, types} from "../data/store";
+import {filterData, homeState, onDateChange, onDaysChange, onDestinationChange, onTypeChange} from "./homeSlice";
+import {destinations, types, vehicleDetails} from "../data/store";
 import {disabledDate} from "./homeLogic";
 import {useHistory} from "react-router";
 import {FaMapMarkedAlt} from "react-icons/fa";
 import {env} from "../../conf/env";
+import {fetchData} from "./homeService";
+import {LoadingOutlined} from '@ant-design/icons';
+import moment from 'moment';
 
 export function Home() {
     const {Option} = Select;
     const dispatch = useDispatch();
     const homeVals = useSelector(homeState);
     const history = useHistory();
-    const listData = data;
+    const listData = vehicleDetails;
 
-   /* const customIcons = {
-        1: <FrownOutlined/>,
-        2: <FrownOutlined/>,
-        3: <MehOutlined/>,
-        4: <SmileOutlined/>,
-        5: <SmileOutlined/>,
-    };*/
-
-    const onItemClick = (id) => {
-        history.push('/vehicle/' + id, {date: homeVals.date, destinations: destinations, types: types});
+    const onItemClick = (item) => {
+        history.push('/vehicle/' + item.destination, {
+            date: homeVals.date,
+            destinations: destinations,
+            types: types,
+            days: homeVals.days,
+            item: item
+        });
     }
 
-    
+    const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
+
+
     useEffect(() => {
         fetchData(dispatch);
     });
@@ -55,14 +50,16 @@ export function Home() {
                     <br/>
                     <Row gutter={24}>
                         <Col md={{span: 6, offset: 0}} xs={{span: 12, offset: 0}}>
-                            <DatePicker style={{width: 200}} placeholder="When?"
-                                        onChange={(e) => dispatch(onDateChange(e === null ? null : Number(e.valueOf())))}
-                                        disabledDate={disabledDate}
+                            <DatePicker defaultValue = {homeVals.date === undefined ? undefined : moment(homeVals.date)}
+                                style={{width: 200}} placeholder="When?"
+                                onChange={(e) => dispatch(onDateChange(e === null ? null : Number(e.valueOf())))}
+                                disabledDate={disabledDate}
                             />
                         </Col>
 
                         <Col md={{span: 6}} xs={{span: 12, offset: 0}}>
                             <Select
+                                value={homeVals.destination}
                                 showSearch
                                 allowClear
                                 style={{width: 200}}
@@ -79,7 +76,7 @@ export function Home() {
                         </Col>
 
                         <Col md={{span: 6, offset: 0}} xs={{span: 12, offset: 0}}>
-                            <InputNumber min={1} style={{width: 200}} placeholder="How many Days?"
+                            <InputNumber value={homeVals.days} min={1} style={{width: 200}} placeholder="How many Days?"
                                          onChange={e => {
                                              dispatch(onDaysChange(Number(e)))
                                          }}/>
@@ -87,6 +84,7 @@ export function Home() {
 
                         <Col md={{span: 6}} xs={{span: 12, offset: 0}}>
                             <Select
+                                value={homeVals.type}
                                 showSearch
                                 allowClear
                                 style={{width: 200}}
@@ -97,7 +95,7 @@ export function Home() {
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                {Object.keys(types).map(type=> (
+                                {Object.keys(types).map(type => (
                                     <Option value={type}>{type}</Option>
                                 ))}
                             </Select>
@@ -112,32 +110,38 @@ export function Home() {
             <Row>
                 <Col md={{span: 12, offset: 6}} xs={{span: 24, offset: 0}}>
                     <div className={styles.break}>
-                        <List
-                            dataSource={filterData(listData, homeVals)}
-                            pagination={{
-                                pageSize: 5,
-                            }}
-                            renderItem={item => (
-                                <List.Item className={styles.clickable} onClick={() => {
-                                    onItemClick(item.id)
+                        {!homeVals.isVehicleDetailsFetched ? (
+                            <Spin indicator={antIcon}/>
+                        ) : (
+                            <List
+                                dataSource={filterData(listData, homeVals)}
+                                pagination={{
+                                    pageSize: 5,
                                 }}
-                                           key={item.title}>
-                                    <List.Item.Meta
-                                        avatar={<Image alt="van_pic" style={{width: 100}} src={item.avatars[0]}/>}
-                                        title={<h3 style={{width: '100%'}}>LKR {item.price}</h3>}
-                                        description={<h5><FaMapMarkedAlt color={env.color} size={16}/> {item.destination}</h5>
-                                            /*<Rate style={{width: '100%'}} defaultValue={item.star}
-                                                           character={({index}) => customIcons[index + 1]}
-                                                           disabled/>*/}
+                                renderItem={item => (
+                                    <List.Item className={styles.clickable} onClick={() => {
+                                        onItemClick(item)
+                                    }}
+                                               key={item.title}>
+                                        <List.Item.Meta
+                                            avatar={<Image alt="van_pic" style={{width: 100}} src={item.avatars['main']}/>}
+                                            title={<h3 className={styles.mid}>LKR {item.price}</h3>}
+                                            description={<h5 className={styles.mid}>
+                                                < FaMapMarkedAlt color={env.color}
+                                                                 size={16}/> {item.destination}</h5>
+                                            }
 
-                                    />
-                                    <div style={{textAlign: "left"}}>
-                                        <Tag color={"#722ed1"}>{item.type}</Tag>
-                                    </div>
+                                        />
+                                        <div style={{textAlign: "left"}}>
+                                            <Tag color={"#722ed1"}>{item.type}</Tag>
+                                        </div>
 
-                                </List.Item>
-                            )}
-                        />
+                                    </List.Item>
+                                )}
+                            />
+                        )}
+
+
                     </div>
                 </Col>
             </Row>

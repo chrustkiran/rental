@@ -7,6 +7,21 @@
 .break {
     margin-top: 100px;
 }
+@media only screen and (max-width: 600px) {
+    .row {
+        margin-top: 100px;
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .mobMid{
+        text-align: center;
+        margin-left: 20%;
+    }
+}
+
 
 .center {
     text-align: center;
