@@ -19,8 +19,6 @@ const fetchDestination = (dispatch) => {
 }
 
 const fetchTypes = (dispatch) => {
-    db.ref('/rental/testArray').push('value3');
-
     db.ref('/rental/types').on('value', snapShot => {
         const typesData = snapShot.val();
         Object.keys(typesData).forEach(type => {
